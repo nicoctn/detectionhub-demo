@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="DetectionHub is a blue-team detection engineering harness for discovering, tuning, translating and testing rules and challenging coverage with threat intelligence.">
+  <link rel="icon" href="data:,">
+  <title>DetectionHub — Project documentation</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f4f5ef;
+      --surface: #fcfdf9;
+      --ink: #172925;
+      --subtle: #4d6058;
+      --line: #cdd7cb;
+      --night: #152823;
+      --night-muted: #b8c9be;
+      --mint: #d2ef91;
+      --green: #315e43;
+      --wash: #e5eedc;
+      --mono: ui-monospace, "SFMono-Regular", Consolas, monospace;
+      --sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-padding-top: 2rem; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 1rem/1.62 var(--sans); }
+    a { color: inherit; }
+    a:focus-visible { outline: 2px solid #6f932b; outline-offset: 5px; }
+    .skip { position: absolute; top: 1rem; left: 1rem; padding: .6rem .8rem; background: var(--surface); color: var(--ink); transform: translateY(-220%); z-index: 2; }
+    .skip:focus { transform: translateY(0); }
+    .wrap { width: min(1120px, calc(100% - 5rem)); margin-inline: auto; }
+    .hero { background: var(--night); color: var(--surface); }
+    .bar { display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; min-height: 72px; border-bottom: 1px solid #486054; }
+    .brand { display: inline-flex; align-items: center; gap: .65rem; font-weight: 750; letter-spacing: -.025em; text-decoration: none; white-space: nowrap; }
+    .brand-mark { flex: none; color: var(--mint); }
+    nav { display: flex; flex-wrap: wrap; gap: .45rem 1.4rem; }
+    nav a { font-size: .86rem; color: var(--night-muted); text-decoration: none; }
+    nav a:hover { color: var(--mint); text-decoration: underline; text-underline-offset: .25em; }
+    .hero-content { padding-block: 5.2rem 4.7rem; display: grid; grid-template-columns: 1.18fr .82fr; align-items: center; gap: 4rem; }
+    .eyebrow, .index, .tag, .flow-label, dt, .meta { font: 650 .72rem/1.45 var(--mono); letter-spacing: .105em; text-transform: uppercase; }
+    .eyebrow { margin: 0 0 1rem; color: var(--mint); }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { font-size: clamp(3.2rem, 7.5vw, 6.9rem); line-height: .98; letter-spacing: -.075em; margin-bottom: 1.5rem; }
+    .hero-intro { font-size: clamp(1.17rem, 2.1vw, 1.55rem); line-height: 1.42; max-width: 31ch; margin: 0 0 1rem; letter-spacing: -.025em; }
+    .hero-note { color: var(--night-muted); max-width: 47ch; margin: 0; }
+    .flow { margin: 0; border: 1px solid #5b7263; padding: 1.3rem 1.4rem 1.15rem; border-radius: 10px; background: #1b322a; }
+    .flow figcaption { color: var(--mint); margin-bottom: .55rem; }
+    .flow ol { margin: 0; padding: 0; list-style: none; }
+    .flow li { display: grid; grid-template-columns: 2rem minmax(0, 1fr); gap: .25rem; padding: .78rem 0; border-bottom: 1px solid #456052; }
+    .flow li:last-child { border-bottom: 0; }
+    .flow .num { color: var(--mint); font: .8rem/1.75 var(--mono); }
+    .flow strong { display: block; font-size: .96rem; }
+    .flow small { display: block; color: var(--night-muted); font-size: .81rem; line-height: 1.45; }
+    .hero-demo { display: inline-block; margin-top: 1.45rem; padding: .6rem .95rem; border-radius: 6px; background: var(--mint); color: var(--night); font-weight: 720; text-decoration: none; }
+    .hero-demo:hover { text-decoration: underline; text-underline-offset: .22em; }
+    .demo { margin: 0; }
+    .demo video { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+    .demo figcaption { margin-top: .65rem; color: var(--subtle); font-size: .9rem; }
+    @media print { #demo, .hero-demo { display: none; } }
+    .metrics { margin: 0; padding: 1.65rem 0 1.5rem; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-bottom: 1px solid var(--line); gap: .9rem 1.35rem; }
+    .metrics > div { display: flex; flex-direction: column; gap: .28rem; }
+    .metrics dt { color: var(--green); order: 2; }
+    .metrics dd { margin: 0; font-size: clamp(1.85rem, 3.4vw, 3.2rem); line-height: 1.1; letter-spacing: -.07em; font-weight: 760; font-variant-numeric: tabular-nums; }
+    .measurement { margin: .75rem 0 0; font-size: .86rem; color: var(--subtle); }
+    .section { padding-block: 3.6rem; border-bottom: 1px solid var(--line); }
+    .section-head { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: end; margin-bottom: 1.45rem; }
+    .index { color: var(--green); margin: 0 0 .38rem; }
+    h2 { font-size: clamp(2.15rem, 4vw, 3.45rem); line-height: 1.03; letter-spacing: -.065em; margin-bottom: 0; }
+    .section-head > p { margin: 0; color: var(--subtle); max-width: 51ch; }
+    h3 { margin-bottom: .5rem; line-height: 1.25; letter-spacing: -.028em; font-size: 1.26rem; }
+    .two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    .card { padding: 1.35rem 1.45rem; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+    .card p:last-child, .roadmap p:last-child { margin-bottom: 0; }
+    .card p, .choice p { color: var(--subtle); margin-bottom: .65rem; }
+    .tag { display: inline-block; margin: 0 0 .7rem; padding: .22rem .5rem; border-radius: 4px; background: var(--wash); color: #2b563b; letter-spacing: .05em; }
+    .choices { margin-top: 1.35rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.4rem; }
+    .choice { padding-top: .9rem; border-top: 2px solid #a3b99c; }
+    .choice h3 { font-size: 1rem; }
+    .choice p { font-size: .93rem; margin: 0; }
+    .stack { margin: 0; border-top: 1px solid var(--line); }
+    .stack > div { display: grid; grid-template-columns: minmax(11rem, .36fr) minmax(0, 1fr); gap: .7rem 1.4rem; padding: .78rem 0; border-bottom: 1px solid var(--line); }
+    .stack dt { color: var(--green); align-self: start; padding-top: .22rem; }
+    .stack dd { margin: 0; }
+    .roadmap { list-style: none; padding: 0; margin: 0; display: grid; gap: .7rem; }
+    .roadmap li { display: grid; grid-template-columns: 2.55rem minmax(0, 1fr); gap: .7rem 1.05rem; padding: 1.05rem 1.25rem; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+    .roadmap .step { font: 650 .82rem/1.65 var(--mono); color: var(--green); }
+    .roadmap h3 { margin-bottom: .22rem; }
+    .roadmap p { color: var(--subtle); }
+    .roadmap .check { font-size: .92rem; margin-top: -.48rem; }
+    .check strong { color: var(--ink); }
+    footer { padding-block: 1.5rem 2.3rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: .6rem 1rem; color: var(--subtle); }
+    footer p { margin: 0; }
+    footer a { font-size: .86rem; text-underline-offset: .2em; }
+    @media (max-width: 800px) {
+      .wrap { width: calc(100% - 3rem); }
+      .hero-content { grid-template-columns: 1fr; gap: 1.9rem; padding-block: 3.1rem; }
+      .flow { max-width: 35rem; }
+      .section-head { grid-template-columns: 1fr; gap: .7rem; }
+      .section { padding-block: 2.75rem; }
+    }
+    @media (max-width: 550px) {
+      .wrap { width: calc(100% - 2rem); }
+      .bar { align-items: flex-start; flex-direction: column; gap: .65rem; padding-block: .8rem; }
+      nav { gap: .4rem .9rem; }
+      .hero-content { padding-block: 2.35rem; }
+      h1 { font-size: clamp(2.45rem, 12vw, 3.7rem); }
+      .two, .choices { grid-template-columns: 1fr; }
+      .stack > div { grid-template-columns: 1fr; gap: .3rem; }
+      .roadmap li { grid-template-columns: 1.8rem minmax(0, 1fr); gap: .5rem; padding: .85rem; }
+    }
+    @media print {
+      .wrap { width: 100%; }
+      .hero { background: white; color: var(--ink); }
+      .eyebrow, .brand-mark, .flow figcaption, .flow .num { color: var(--green); }
+      .hero-note, .flow small { color: var(--subtle); }
+      .flow { background: white; border-color: var(--line); }
+      .bar { min-height: 40px; }
+      nav, .skip, footer a { display: none; }
+      .hero-content { padding-block: 1.2rem; gap: 1.5rem; }
+      h1 { font-size: 3.7rem; }
+      .section { padding-block: 1.2rem; }
+      .card, .roadmap li, .stack > div { break-inside: avoid; }
+    }
+    .feature-grid strong { color: var(--ink); }
+    .system { margin: 0 0 1.6rem; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+    .system figcaption { display: flex; gap: .3rem 1rem; justify-content: space-between; align-items: baseline; flex-wrap: wrap; padding: .85rem 1.05rem; border-bottom: 1px solid var(--line); }
+    .system figcaption span, .system-key, .ref-links { font-size: .83rem; color: var(--subtle); }
+    .system-scroll { overflow-x: auto; padding: .4rem; }
+    .system-scroll:focus-visible { outline: 2px solid #6f932b; outline-offset: -2px; }
+    .system-map { display: block; width: 100%; min-width: 810px; height: auto; font-family: var(--sans); }
+    .svg-box, .svg-external { fill: #fcfdf9; stroke: #98ae9d; }
+    .svg-external { stroke: #6d8b77; stroke-dasharray: 5 4; }
+    .svg-edge { fill: none; stroke: #4c8067; stroke-width: 1.65; }
+    .svg-zone { font: 650 11px var(--mono); letter-spacing: 1.35px; fill: #365846; }
+    .svg-wire { font: 600 11px var(--mono); fill: #39644d; }
+    .svg-title { font-size: 17px; font-weight: 720; fill: #172925; }
+    .svg-sub { font-size: 12px; fill: #4d6058; }
+    .svg-core-title { font-size: 22px; font-weight: 730; fill: #f4f5ef; }
+    .svg-core-sub { font-size: 13px; fill: #dbe8d9; }
+    .system-key { margin: 0; padding: .6rem 1.05rem .85rem; }
+    .key-external { display: inline-block; width: 1.2rem; height: .72rem; border: 1px dashed #6d8b77; vertical-align: -.05rem; margin-right: .26rem; }
+    .ref-links { margin-top: .5rem !important; }
+    .ref-links a { text-underline-offset: .2em; }
+    .source-map { margin-top: 1.4rem; padding: .8rem 1rem; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+    .source-map summary { cursor: pointer; font-weight: 650; }
+    .source-map dl { display: grid; gap: .55rem; margin-bottom: .3rem; }
+    .source-map dt { color: var(--green); }
+    .source-map dd { margin: .16rem 0 0; color: var(--subtle); overflow-wrap: anywhere; }
+    @media print { .system-map { min-width: 0; } }
+  </style>
+</head>
+<body id="top">
+  <a class="skip" href="#content">Skip to content</a>
+  <header class="hero">
+    <div class="bar wrap">
+      <a class="brand" href="#top">
+        <svg class="brand-mark" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 2.5 21.5 7v10L12 21.5 2.5 17V7L12 2.5Z" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M6.5 12h3l2-4.5 2.5 9 1.5-4.5h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        DetectionHub
+      </a>
+      <nav aria-label="On this page">
+        <a href="#demo">Demo</a>
+        <a href="#workflow">Analyst workflow</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#stack">Stack</a>
+        <a href="#roadmap">Roadmap</a>
+      </nav>
+    </div>
+    <div class="hero-content wrap">
+      <div>
+        <p class="eyebrow">Independent project / Technical documentation</p>
+        <h1>DetectionHub</h1>
+        <p class="hero-intro">A detection engineering harness for blue teams.</p>
+        <p class="hero-note">Find a starting point, adapt it to your telemetry, decide whether it belongs in a hunt or an alert, and use new threat intelligence to challenge what you already cover.</p>
+        <a class="hero-demo" href="#demo">Watch the 2-minute demo ↓</a>
+      </div>
+      <figure class="flow">
+        <figcaption class="flow-label">The analyst’s decision loop</figcaption>
+        <ol>
+          <li><span class="num" aria-hidden="true">01</span><div><strong>Find a starting point</strong><small>Search community content, prior work and ATT&amp;CK coverage.</small></div></li>
+          <li><span class="num" aria-hidden="true">02</span><div><strong>Adapt the query</strong><small>Translate it, tune it for local logs and keep a versioned copy.</small></div></li>
+          <li><span class="num" aria-hidden="true">03</span><div><strong>Decide how to use it</strong><small>Classify it, inspect its evidence and test it in the target SIEM.</small></div></li>
+          <li><span class="num" aria-hidden="true">04</span><div><strong>Challenge coverage</strong><small>Use new CTI to revisit existing rules and draft candidates for gaps.</small></div></li>
+        </ol>
+      </figure>
+    </div>
+  </header>
+
+  <main class="wrap" id="content" tabindex="-1">
+    <dl class="metrics" aria-label="Project figures">
+      <div><dt>Community rules · 11 sources</dt><dd>17,989</dd></div>
+      <div><dt>SIEM / EDR / XDR query languages</dt><dd>29</dd></div>
+    </dl>
+    <p class="measurement">Local project snapshot. Language count reflects the export registry. Each rule can export the query implementations it contains.</p>
+
+    <section class="section" id="demo" aria-labelledby="demo-title">
+      <div class="section-head">
+        <div><p class="index">Product demo / 2 min</p><h2 id="demo-title">DetectionHub in action</h2></div>
+        <p>Watch a blue-team workflow from community rule discovery and live query conversion to CTI review and a new rule in My Rules.</p>
+      </div>
+      <figure class="demo">
+        <video controls playsinline preload="metadata" width="1600" height="1060" poster="./assets/demo-poster.jpg" aria-labelledby="demo-title" aria-describedby="demo-caption">
+          <source src="./assets/DetectionHub-demo.mp4" type="video/mp4">
+          <a href="./assets/DetectionHub-demo.mp4">Open the MP4 directly</a>
+        </video>
+        <figcaption id="demo-caption">Screen recording with English on-screen captions and no audio. The Copilot segment shows a saved example conversation.</figcaption>
+      </figure>
+    </section>
+
+    <section class="section" id="workflow" aria-labelledby="workflow-title">
+      <div class="section-head">
+        <div><p class="index">01 / Analyst workflow</p><h2 id="workflow-title">From reference to decision</h2></div>
+        <p>The harness brings reference content, an analyst’s tuned rules, conversion, SIEM evidence and CTI into the same workflow. Each component supports a different decision.</p>
+      </div>
+      <div class="two feature-grid">
+        <article class="card">
+          <span class="tag">Discover</span>
+          <h3>Community Library</h3>
+          <p>Sync public repositories and rule sources, including Sigma, Splunk and Elastic. Search across titles, descriptions and ATT&amp;CK mappings. Import a reference into My Rules with source provenance, its original query and available notes on false positives.</p>
+        </article>
+        <article class="card">
+          <span class="tag">Own and tune</span>
+          <h3>My Rules</h3>
+          <p>Maintain an analyst-curated library with local query variants, required logs, investigation playbooks and version history. Compare local logic with upstream changes, inspect diffs and exchange rule files with GitHub.</p>
+        </article>
+        <article class="card">
+          <span class="tag">Translate and review</span>
+          <h3>Cross-SIEM conversion</h3>
+          <p>Use pySigma through a sigma-cli service for supported Sigma backends, Uncoder IO for supported cross-format translations, or AI-assisted conversion and review. Review mappings and field assumptions before adding the translated query as another implementation.</p>
+        </article>
+        <article class="card">
+          <span class="tag">Investigate</span>
+          <h3>Copilot and coverage analysis</h3>
+          <p>Use the Copilot to retrieve rule implementations, audit rules and analyze ATT&amp;CK coverage. It uses the analyst’s detection profile, including the primary SIEM, available telemetry and known false positives. Coverage analysis separates validated rules, untested implementations, library candidates and gaps.</p>
+        </article>
+        <article class="card">
+          <span class="tag">Classify and test</span>
+          <h3>Decide how the SOC will use it</h3>
+          <p><strong>Artifact type</strong> distinguishes a detection rule from a hunting query. <strong>SOC usage</strong> separately classifies the result as <strong>Alert</strong> for actionable signals, <strong>Monitor</strong> for trends, or <strong>Hunt</strong> for exploration.</p>
+          <p>Review the rule’s lifecycle, telemetry, test and deployment status separately. Query-test connectors for Splunk, Elastic and Microsoft Sentinel are implemented. Reproducible replay against labeled events is planned.</p>
+        </article>
+        <article class="card">
+          <span class="tag">Reassess</span>
+          <h3>Threat Feed</h3>
+          <p>Collect CTI through RSS, triage it with heuristics and a model, then extract cited behavior and ATT&amp;CK mappings. Compare the evidence with personal rules and community references. Where a gap remains, propose an adaptation or a new rule with telemetry requirements and assumptions for analyst review.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="architecture" aria-labelledby="architecture-title">
+      <div class="section-head">
+        <div><p class="index">02 / System architecture</p><h2 id="architecture-title">How the harness is wired</h2></div>
+        <p>DetectionHub supplies the blue-team tools, context and workflow. The interactive Copilot uses an agent runtime to choose and call tools. The scheduled Threat Feed drives its own stages and calls the configured model where needed.</p>
+      </div>
+
+      <figure class="system" aria-labelledby="system-caption">
+        <figcaption id="system-caption"><strong>DetectionHub system map</strong><span>Implemented paths and integration boundaries</span></figcaption>
+        <div class="system-scroll" role="region" aria-label="Architecture diagram, horizontally scrollable on narrow screens" tabindex="0">
+          <svg class="system-map" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 600" role="img" aria-labelledby="map-title map-desc">
+            <title id="map-title">DetectionHub architecture</title>
+            <desc id="map-desc">The analyst uses the Next.js workbench to access the Copilot and shared services. The CLI and standalone MCP proxy call the REST API. RSS and public rule sources feed ingestion and the Threat Feed. The Copilot and Threat Feed use provider adapters. Shared services connect to SQLite, the converter services, SIEM search APIs and GitHub.</desc>
+            <defs>
+              <marker id="arch-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0 0 8 4 0 8Z" fill="#4c8067"/></marker>
+            </defs>
+            <rect x="16" y="112" width="1088" height="337" rx="15" fill="#eff5e9" stroke="#a7bbab"/>
+            <text class="svg-zone" x="34" y="137">DETECTIONHUB APP</text>
+            <text class="svg-zone" x="187" y="478">DATA AND EXTERNAL SYSTEMS</text>
+
+            <g class="svg-edge" marker-end="url(#arch-arrow)">
+              <path d="M188 93V155"/>
+              <path d="M560 93V298"/>
+              <path d="M932 93V155"/>
+              <path d="M78 93V112H24V340H37"/>
+              <path d="M193 255V298"/>
+              <path d="M927 255V298"/>
+              <path d="M164 396V495"/>
+              <path d="M428 396V495"/>
+              <path d="M692 396V495"/>
+              <path d="M956 396V495"/>
+            </g>
+            <g class="svg-wire">
+              <text x="570" y="283">REST / OpenAPI</text>
+              <text x="205" y="282">tool calls</text>
+              <text x="937" y="282">coverage + proposals</text>
+            </g>
+
+            <g>
+              <rect class="svg-box" x="37" y="17" width="302" height="76" rx="9"/>
+              <text class="svg-title" x="54" y="47">Analyst workbench</text>
+              <text class="svg-sub" x="54" y="71">Next.js UI · Library · My Rules · Copilot</text>
+              <rect class="svg-box" x="409" y="17" width="302" height="76" rx="9"/>
+              <text class="svg-title" x="426" y="47">CLI and MCP clients</text>
+              <text class="svg-sub" x="426" y="71">dhub · standalone MCP proxy</text>
+              <rect class="svg-external" x="781" y="17" width="302" height="76" rx="9"/>
+              <text class="svg-title" x="798" y="47">Public sources</text>
+              <text class="svg-sub" x="798" y="71">Rule repositories and CTI RSS feeds</text>
+            </g>
+
+            <g>
+              <rect class="svg-box" x="37" y="155" width="455" height="100" rx="9"/>
+              <text class="svg-title" x="54" y="187">Copilot and provider adapters</text>
+              <text class="svg-sub" x="54" y="211">Claude Agent SDK · Codex App Server · Vercel AI SDK</text>
+              <text class="svg-sub" x="54" y="234">Detection profile · session context · inline or REST-backed tools</text>
+
+              <rect class="svg-box" x="628" y="155" width="455" height="100" rx="9"/>
+              <text class="svg-title" x="645" y="187">Rule sync and Threat Feed</text>
+              <text class="svg-sub" x="645" y="211">Library parsers · scheduled CTI collection and triage</text>
+              <text class="svg-sub" x="645" y="234">Evidence checks · stage-specific model calls · analyst review</text>
+            </g>
+            <path d="M628 204H492" fill="none" stroke="#4c8067" stroke-width="1.5" stroke-dasharray="5 5" marker-end="url(#arch-arrow)"/>
+            <rect x="510" y="178" width="100" height="20" rx="4" fill="#eff5e9"/>
+            <text class="svg-wire" x="560" y="192" text-anchor="middle">LLM adapters</text>
+
+            <g>
+              <rect x="37" y="298" width="1046" height="98" rx="9" fill="#214335"/>
+              <text class="svg-core-title" x="54" y="332">Shared application services</text>
+              <text class="svg-core-sub" x="54" y="358">Rules and versioning · library search · ATT&amp;CK coverage · audit · conversion · SIEM test jobs · export</text>
+              <text class="svg-core-sub" x="54" y="379">REST/OpenAPI, tRPC and server actions reuse the application’s domain logic.</text>
+            </g>
+
+            <g>
+              <rect class="svg-box" x="37" y="495" width="254" height="79" rx="9"/>
+              <text class="svg-title" x="52" y="525">SQLite / Prisma</text>
+              <text class="svg-sub" x="52" y="550">FTS5 · rules · CTI · traces</text>
+
+              <rect class="svg-external" x="301" y="495" width="254" height="79" rx="9"/>
+              <text class="svg-title" x="316" y="525">Conversion services</text>
+              <text class="svg-sub" x="316" y="550">sigma-cli / pySigma · Uncoder IO</text>
+
+              <rect class="svg-external" x="565" y="495" width="254" height="79" rx="9"/>
+              <text class="svg-title" x="580" y="525">SIEM search APIs</text>
+              <text class="svg-sub" x="580" y="550">Splunk · Elastic · Sentinel</text>
+
+              <rect class="svg-external" x="829" y="495" width="254" height="79" rx="9"/>
+              <text class="svg-title" x="844" y="525">GitHub</text>
+              <text class="svg-sub" x="844" y="550">Rule files · push and pull</text>
+            </g>
+          </svg>
+        </div>
+        <p class="system-key"><span class="key-external" aria-hidden="true"></span> Dashed boxes mark external integrations. The dashed arrow shows the Threat Feed’s model calls through the provider adapters.</p>
+      </figure>
+
+      <div class="choices">
+        <article class="choice">
+          <h3>Reuse an authenticated runtime</h3>
+          <p>The Claude Agent SDK and Codex App Server paths can reuse the analyst’s signed-in runtime for Copilot and Threat Feed, without a separate model API key in those modes. The provider’s plan and usage limits still apply. API-key and local Ollama modes are separate options.</p>
+          <p class="ref-links"><a href="https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan">Claude plan usage</a> · <a href="https://developers.openai.com/siwc/token-sharing-open-source/codex-app-server">Codex App Server authentication</a></p>
+        </article>
+        <article class="choice">
+          <h3>Separate references from local rules</h3>
+          <p>Keep the upstream rule and the analyst’s tuned variant as distinct records. SQLite FTS5 provides lexical lookup. The profile and retrieved implementations give the model the context for the current investigation.</p>
+        </article>
+        <article class="choice">
+          <h3>Make evidence and decisions reviewable</h3>
+          <p>Keep quoted source evidence, prompt versions and per-stage traces alongside proposals. An analyst can inspect, edit or dismiss a proposal before adding it to My Rules for review.</p>
+        </article>
+      </div>
+
+      <details class="source-map">
+        <summary>Implementation references in the repository</summary>
+        <dl>
+          <div><dt>Library import and lineage</dt><dd><code>src/server/routers/library.ts</code> · <code>src/lib/sync.ts</code></dd></div>
+          <div><dt>Rule lifecycle and usage</dt><dd><code>prisma/schema.prisma</code> · <code>src/lib/rules/usage-definitions.ts</code></dd></div>
+          <div><dt>Agent runtime and tools</dt><dd><code>src/app/api/copilot/route.ts</code> · <code>src/lib/ai/providers/</code> · <code>src/mcp/server.ts</code></dd></div>
+          <div><dt>CTI and coverage</dt><dd><code>src/lib/threat-feed/</code> · <code>src/lib/services/detection-gap.service.ts</code></dd></div>
+          <div><dt>Conversion and query testing</dt><dd><code>src/server/routers/convert.ts</code> · <code>src/lib/services/connectors/</code></dd></div>
+        </dl>
+      </details>
+    </section>
+
+    <section class="section" id="stack" aria-labelledby="stack-title">
+      <div class="section-head">
+        <div><p class="index">03 / Technologies</p><h2 id="stack-title">Technical stack</h2></div>
+      </div>
+      <dl class="stack">
+        <div><dt>Application</dt><dd>TypeScript, Next.js App Router, React, tRPC, Zod</dd></div>
+        <div><dt>Data and retrieval</dt><dd>Prisma, SQLite, FTS5</dd></div>
+        <div><dt>Agent runtimes</dt><dd>Claude Agent SDK, Codex App Server, Vercel AI SDK, Ollama</dd></div>
+        <div><dt>Interfaces</dt><dd>REST/OpenAPI, Model Context Protocol (MCP), CLI</dd></div>
+        <div><dt>Detection engineering</dt><dd>MITRE ATT&amp;CK, Sigma, pySigma via sigma-cli, Uncoder IO, GitHub sync</dd></div>
+        <div><dt>SIEM query testing</dt><dd>Splunk SPL, Elastic, Microsoft Sentinel KQL</dd></div>
+        <div><dt>CTI and observability</dt><dd>RSS, node-cron, versioned prompts and structured traces in SQLite</dd></div>
+      </dl>
+    </section>
+
+    <section class="section" id="roadmap" aria-labelledby="roadmap-title">
+      <div class="section-head">
+        <div><p class="index">04 / Planned work</p><h2 id="roadmap-title">Roadmap</h2></div>
+        <p>Turn CTI findings into reproducible lab tests and use SIEM evidence to decide which detections to keep, tune or investigate.</p>
+      </div>
+      <ol class="roadmap">
+        <li><span class="step" aria-hidden="true">01</span><div>
+          <h3>Deploy Ludus labs and replay CTI-driven scenarios</h3>
+          <p>Provision isolated, versioned lab environments with Ludus. Use agents to map CTI findings to approved emulation scenarios and prepare the test plan. Run those scenarios in the lab and capture the telemetry, expected detections and observed results for each test.</p>
+        </div></li>
+        <li><span class="step" aria-hidden="true">02</span><div>
+          <h3>Measure detection quality directly in the SIEM</h3>
+          <p>Build on the existing query-test connectors to collect per-rule match volume, trends and top triggers over time. Use an agent to inspect samples, explain likely noise and suggest tuning for analyst review. Measure false-positive rates on labeled data and report the proportion of false alerts in reviewed production samples separately.</p>
+        </div></li>
+        <li><span class="step" aria-hidden="true">03</span><div>
+          <h3>Deploy an observability platform</h3>
+          <p>Integrate Langfuse for model and tool traces, latency, token usage and evaluation results. Correlate these traces with CTI, lab and SIEM runs through a shared run ID. Keep detailed security telemetry in the SIEM and export only the context needed to debug and evaluate the workflow.</p>
+        </div></li>
+        <li><span class="step" aria-hidden="true">04</span><div>
+          <h3>Standardize workflow orchestration with LangGraph</h3>
+          <p>Use a stateful graph for multi-step CTI-to-lab validation, including checkpoints, retries and approval gates. Keep Claude Agent SDK and Codex App Server behind the existing provider adapters. Start with one workflow and ensure retries cannot launch the same lab run or SIEM job twice.</p>
+        </div></li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <p class="meta">DetectionHub / Project documentation</p>
+    <a href="#top">Back to top ↑</a>
+  </footer>
+</body>
+</html>
